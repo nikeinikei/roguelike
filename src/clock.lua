@@ -1,4 +1,3 @@
-
 --A class for a clock object to keep track of elapsed Time
 Clock = {
     startTime

@@ -1,5 +1,5 @@
-local player = require "player"
-local playerw, playerh = player:getDimensions()
+local Player = require "player"
+local playerw, playerh = Player:getDimensions()
 
 local camera = {}
 
@@ -7,7 +7,16 @@ local padding = 200
 local transx = 0
 local transy = 0
 
+local player
+
+function camera:setPlayer(nPlayer)
+    player = nPlayer
+end
+
 function camera:update()
+    if player == nil then
+        error("player not initialized in camera yet.")
+    end
     local playerx, playery = player:getPosition()
     if playerx < transx + padding then
         transx = playerx - padding
@@ -24,7 +33,7 @@ function camera:update()
 end
 
 function camera:apply()
-    --havent quite figured out why it has to be -, but *shrug*
+    --havent quite figured out why it has to be minus, but *shrug*
     love.graphics.translate(-transx, -transy)
 end
 

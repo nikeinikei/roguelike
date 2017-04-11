@@ -3,12 +3,15 @@
 
 local Gamestate = require "gamestate"
 local grid = require "grid"
-local player = require "player"
+local Player = require "player"
 local Room = require "room"
 local camera = require "camera"
+local bump = require "bump"
+local settings = require "settings"
 
-local world
 local room
+local player
+local world
 
 local PlayingState = Gamestate:new()
 PlayingState.__index = PlayingState
@@ -17,17 +20,18 @@ function PlayingState:new(application)
     local o = {}
     setmetatable(o, self)
     o:setApp(application)
-    --reset plane
-    love.graphics.origin()
 
-    world = love.physics.newWorld()
-    room = Room:new(world, 2, 2)
+    grid:reset()
+
+    world = bump.newWorld()
+    player = Player:new(world)
+    camera:setPlayer(player)
+    room = Room:new(world, settings.startingTile.gridx, settings.startingTile.gridy)
 
     return o
 end
 
 function PlayingState:update(dt)
-    world:update(dt)
     player:update(dt)
     camera:update()
 end
@@ -48,6 +52,10 @@ end
 function PlayingState:keypressed(key, code, isRepeat)
     if key == "escape" then
         love.event.quit()
+    end
+    --easy restart
+    if key == "r" then
+        love.event.quit("restart")
     end
 end
 

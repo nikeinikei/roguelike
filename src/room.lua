@@ -97,8 +97,6 @@ function Room:new(world, x, y, entrydoor)
     local randomWall = walls[randomWallIndex]
     local wallx = randomWall.x
     local wally = randomWall.y
-    print(wallx)
-    print(wally)
     local wallorientation = randomWall.orientation
     randomWall:destroy()
     table.remove(walls, randomWallIndex)

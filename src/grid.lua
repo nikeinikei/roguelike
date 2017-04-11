@@ -22,30 +22,29 @@ end
 function Grid:get(x, y)
     if grid[x] == nil then
         return false
-    else 
+    else
         if grid[x][y] == true then
             return true
         else
             return false
-        end 
+        end
     end
 end
 
-function Grid:delete(x,y)
+function Grid:delete(x, y)
     if grid[x] ~= nil then
         grid[x][y] = nil
     end
 end
 
 function Grid:deleteColumn(x)
-    print(x)
     grid[x] = nil
 end
 
 function Grid:deleteRow(y)
     for k, v in pairs(grid) do
         if grid[k][y] ~= nil then
-            grid[k][y] = nil 
+            grid[k][y] = nil
         end
     end
 end
@@ -57,6 +56,9 @@ function Grid:draw()
             local y = ky * unit
             love.graphics.setColor(150, 150, 255, 127)
             love.graphics.rectangle("fill", x, y, unit, unit)
+            love.graphics.setColor(255, 255, 255, 255)
+            local coords = "(" .. kx .. ", " .. ky .. ")"
+            --love.graphics.print(coords, x + halfunit - 40, y + halfunit - 40)
         end
     end
 end

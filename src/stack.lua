@@ -1,4 +1,3 @@
-
 --implementation of the data type stack in lua
 --push(element): pushes an element on top of the stack
 --pop(): pops the topmost element off the stack and returns it#

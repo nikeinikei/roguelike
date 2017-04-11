@@ -4,6 +4,7 @@ local halfunit = unit / 2
 
 --the wall width also determines how much farther the wall should extends (due to having a width > 1)
 local wallWdith = 6
+local halfWidth = wallWdith / 2
 
 local wallColor = {
     r = 255,
@@ -15,58 +16,65 @@ local wallColor = {
 local Wall = {}
 Wall.__index = Wall
 
+local counter = 1
+local function getWallId()
+    local wallid = "wall-" .. counter
+    counter = counter + 1
+    return wallid
+end
+
 function Wall:new(world, gridx, gridy, orientation)
     local o = {}
     setmetatable(o, self)
     local lowerx = gridx * unit
     local lowery = gridy * unit
     local success = false
+    local x, y, w, h
     if orientation == "top" then
-        o.body = love.physics.newBody(world, lowerx + halfunit, lowery, "static")
-        o.shape = love.physics.newRectangleShape(unit + wallWdith, wallWdith)
+        x, y, w, h = lowerx, lowery - halfWidth, unit, wallWdith
         success = true
     end
     if orientation == "right" then
-        o.body = love.physics.newBody(world, lowerx + unit, lowery + halfunit, "static")
-        o.shape = love.physics.newRectangleShape(wallWdith, unit + wallWdith)
+        x, y, w, h = lowerx + unit - halfWidth, lowery, wallWdith, unit
         success = true
     end
     if orientation == "lower" then
-        o.body = love.physics.newBody(world, lowerx + halfunit, lowery + unit, "static")
-        o.shape = love.physics.newRectangleShape(unit + wallWdith, wallWdith)
+        x, y, w, h = lowerx, lowery + unit - halfWidth, unit, wallWdith
         success = true
     end
     if orientation == "left" then
-        o.body = love.physics.newBody(world, lowerx, lowery + halfunit, "static")
-        o.shape = love.physics.newRectangleShape(wallWdith, unit + wallWdith)
+        x, y, w, h = lowerx - halfWidth, lowery, wallWdith, unit
         success = true
     end
     if success == false then
         local errormessage = "invalid orientation: \"" .. orientation .. "\""
         error(errormessage)
     end
-    o.fixture = love.physics.newFixture(o.body, o.shape, 1)
-    o.fixture:setUserData("wall")
-    o.x = gridx
-    o.y = gridy
+    o.wallId = getWallId()
+    world:add(o.wallId, x, y, w, h)
+    o.gridx = gridx
+    o.gridy = gridy
+    o.x = x
+    o.y = y
+    o.w = w
+    o.h = h
     o.orientation = orientation
+    o.world = world
     return o
 end
 
+local c = wallColor
 function Wall:draw()
-    local c = wallColor
     love.graphics.setColor(c.r, c.g, c.b, c.a)
-    love.graphics.polygon("fill", self.body:getWorldPoints(self.shape:getPoints()))
+    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+end
+
+function Wall:getColor()
+    return wallColor
 end
 
 function Wall:destroy()
-    --safe destroy
-    if self.body:isDestroyed() == false then 
-        self.body:destroy() 
-    end
-    if self.fixture:isDestroyed() == false then 
-        self.fixture:destroy()
-    end
+    self.world:remove(self.wallId)
 end
 
 function Wall:getWidth()

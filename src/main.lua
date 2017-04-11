@@ -1,7 +1,13 @@
 --entry point of the program
 --all callback functions get implemented and call the apropriate method of the Application
 
-require("application")
+--global world object
+local bump = require "bump"
+local settings = require "settings"
+local cellWidth = settings.gridwidth
+world = bump.newWorld(cellWidth)
+
+local Application = require "application"
 
 function love.load()
     Application:load()

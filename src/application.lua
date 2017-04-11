@@ -1,8 +1,8 @@
 require("stack")
 require("gamestate")
-local PlayingState =  require "playingstate"
+local PlayingState = require "playingstate"
 
-Application = {}
+local Application = {}
 
 --hold all of the gamestates in a Stack data type
 Application.gamestates = Stack:new()
@@ -58,3 +58,5 @@ end
 function Application:focus(f)
     Application.gamestates:top():focus(f)
 end
+
+return Application

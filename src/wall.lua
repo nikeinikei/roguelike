@@ -58,6 +58,8 @@ function Wall:new(world, gridx, gridy, orientation)
     o.y = y
     o.w = w
     o.h = h
+    o.gridx = gridx
+    o.gridy = gridy
     o.orientation = orientation
     o.world = world
     return o

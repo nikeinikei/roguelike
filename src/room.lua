@@ -95,8 +95,8 @@ function Room:new(world, x, y, entrydoor)
     --doorgeneration
     local randomWallIndex = love.math.random(#walls)
     local randomWall = walls[randomWallIndex]
-    local wallx = randomWall.x
-    local wally = randomWall.y
+    local wallx = randomWall.gridx
+    local wally = randomWall.gridy
     local wallorientation = randomWall.orientation
     randomWall:destroy()
     table.remove(walls, randomWallIndex)

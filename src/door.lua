@@ -23,36 +23,46 @@ local function getDoorIds()
 end
 
 function Door:new(world, gridx, gridy, orientation)
+    print("new door with parameters: ", world, gridx, gridy, orientation)
     local o = {}
     setmetatable(o, self)
     local lowerx = gridx * unit
     local lowery = gridy * unit
     local success = false
     local leftDoorId, rightDoorId = getDoorIds()
+    local left = {}
+    local right = {}
     if orientation == "top" then
-        world:add(leftDoorId, lowerx, lowery - (wallWidth / 2), offset, wallWidth)
-        world:add(rightDoorId, lowerx + unit - offset, lowery - (wallWidth / 2), offset, wallWidth)
+        left.x, left.y, left.w, left.h = lowerx, lowery - (wallWidth / 2), offset, wallWidth
+        right.x, right.y, right.w, right.h = lowerx + unit - offset, lowery - (wallWidth / 2), offset, wallWidth
         success = true
     end
     if orientation == "right" then
-        world:add(leftDoorId, lowerx + unit - (wallWidth / 2), lowery, wallWidth, offset)
-        world:add(rightDoorId, lowerx + unit - (wallWidth / 2), lowery + unit - offset, wallWidth, offset)
+        left.x, left.y, left.w, left.h = lowerx + unit - (wallWidth / 2), lowery, wallWidth, offset
+        right.x, right.y, right.w, right.h = lowerx + unit - (wallWidth / 2), lowery + unit - offset, wallWidth, offset
         success = true
     end
     if orientation == "lower" then
-        world:add(leftDoorId, lowerx, lowery - (wallWidth / 2) + unit, offset, wallWidth)
-        world:add(rightDoorId, lowerx + unit - offset, lowery - (wallWidth / 2) + unit, offset, wallWidth)
+        left.x, left.y, left.w, left.h = lowerx, lowery - (wallWidth / 2) + unit, offset, wallWidth
+        right.x, right.y, right.w, right.h = lowerx + unit - offset, lowery - (wallWidth / 2) + unit, offset, wallWidth
         success = true
     end
     if orientation == "left" then
-        world:add(leftDoorId, lowerx - (wallWidth / 2), lowery, wallWidth, offset)
-        world:add(rightDoorId, lowerx - (wallWidth / 2), lowery + unit - offset, wallWidth, offset)
+        left.x, left.y, left.w, left.h = lowerx - (wallWidth / 2), lowery, wallWidth, offset
+        right.x, right.y, right.w, right.h = lowerx - (wallWidth / 2), lowery + unit - offset, wallWidth, offset
         success = true
     end
     if success == false then
         local errormessage = "invalid orientation: \"" .. orientation .. "\""
         error(errormessage)
     end
+    print("leftdoorrectangle: ", left.x, left.y, left.w, left.h)
+    print("rightdoorrectangle: ", right.x, right.y, right.w, right.h)
+    world:add(leftDoorId, left.x, left.y, left.w, left.h)
+    world:add(rightDoorId, right.x, right.y, right.w, right.h)
+    o.world = world
+    o.left = left
+    o.right = right
     o.leftDoorId = leftDoorId
     o.rightDoorId = rightDoorId
     o.x = gridx
@@ -64,10 +74,15 @@ end
 local c = wallColor
 function Door:draw()
     love.graphics.setColor(c.r, c.g, c.b, c.a)
-    local rightx, righty
+    local left, right = self.left, self.right
+
+    love.graphics.rectangle("fill", left.x, left.y, left.w, left.h)
+    love.graphics.rectangle("fill", right.x, right.y, right.w, right.h)
 end
 
 function Door:destroy()
+    self.world:remove(self.leftDoorId)
+    self.world:remove(self.rightDoorId)
 end
 
 return Door

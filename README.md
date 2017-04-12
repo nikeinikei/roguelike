@@ -1,4 +1,4 @@
-This is a simple LÖVE game using. To run it execute the src folder with LÖVE.
+This is a simple LÖVE game. To run it execute the src folder with LÖVE.
 
 __Dependencies:__
 

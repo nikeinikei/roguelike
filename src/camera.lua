@@ -3,7 +3,7 @@ local playerw, playerh = Player:getDimensions()
 
 local camera = {}
 
-local padding = 200
+local padding = 220
 local transx = 0
 local transy = 0
 

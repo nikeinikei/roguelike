@@ -43,16 +43,37 @@ function Player:update(dt)
     if love.keyboard.isDown("left") then
         dx = dx - (v * dt)
     end
-    self.x, self.y = self.world:move(self.id, self.x + dx, self.y + dy)
+    local cols, len
+    self.x, self.y, cols, len = self.world:move(self.id, self.x + dx, self.y + dy)
+    for k, v in pairs(cols) do
+        local other = v.other
+        if other.name == "door" then
+            local gridx, gridy = other.gridx, other.gridy
+            local success = false
+            if other.orientation == "top" then
+                self.world:remove(other)
+                return gridx, gridy - 1
+            end
+            if other.orientation == "right" then
+                self.world:remove(other)
+                return gridx + 1, gridy
+            end
+            if other.orientation == "lower" then
+                self.world:remove(other)
+                return gridx, gridy + 1
+            end
+            if other.orientation == "left" then
+                self.world:remove(other)
+                return gridx - 1, gridy
+            end
+            error("no fitting direction")
+        end
+    end
 end
 
 function Player:draw()
     love.graphics.setColor(220, 220, 220, 255)
     love.graphics.rectangle("fill", self.x, self.y, w, h)
-end
-
-function Player:getWidth()
-    return w
 end
 
 function Player:getPosition()

@@ -9,7 +9,7 @@ local camera = require "camera"
 local bump = require "bump"
 local settings = require "settings"
 
-local room
+local rooms
 local player
 local world
 
@@ -26,13 +26,17 @@ function PlayingState:new(application)
     world = bump.newWorld()
     player = Player:new(world)
     camera:setPlayer(player)
-    room = Room:new(world, settings.startingTile.gridx, settings.startingTile.gridy)
+    rooms = {}
+    table.insert(rooms, Room:new(world, settings.startingTile.gridx, settings.startingTile.gridy))
 
     return o
 end
 
 function PlayingState:update(dt)
-    player:update(dt)
+    local gridx, gridy = player:update(dt)
+    if gridx ~= nil and gridy ~= nil then
+        table.insert(rooms, Room:new(world, gridx, gridy))
+    end
     camera:update()
 end
 
@@ -41,7 +45,9 @@ function PlayingState:draw()
 
     grid:draw()
     player:draw()
-    room:draw()
+    for k, v in pairs(rooms) do
+        v:draw()
+    end
 
     --reset the transformations done by the camera
     love.graphics.origin()
@@ -57,9 +63,6 @@ function PlayingState:keypressed(key, code, isRepeat)
     if key == "r" then
         love.event.quit("restart")
     end
-end
-
-function PlayingState:quit()
 end
 
 return PlayingState

@@ -76,7 +76,7 @@ local function addWalls(world, room)
     end
 end
 
-function Room:new(world, x, y, entrydoor)
+function Room:new(world, x, y)
     local o = {}
     setmetatable(o, self)
 

@@ -63,7 +63,6 @@ function Rooms:addRoom(prevx, prevy, x, y)
         local room = queue:poll()
         local result = room:addDoor()
         if result == false then
-            print("result == false")
             table.insert(visited, room)
             local edges = graph:getEdges(room)
             for k, v in pairs(edges) do
@@ -76,12 +75,9 @@ function Rooms:addRoom(prevx, prevy, x, y)
                     end
                 end
                 if alreadyVisited == false then
-                    print("queue:add()", destination)
                     queue:add(destination)
                 end
             end
-        else
-            print("result == true")
         end
     end
     table.insert(rooms, newRoom)

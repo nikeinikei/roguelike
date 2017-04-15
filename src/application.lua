@@ -1,5 +1,4 @@
-require("stack")
-require("gamestate")
+local Stack = require "stack"
 local PlayingState = require "playingstate"
 
 local Application = {}

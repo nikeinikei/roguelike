@@ -1,4 +1,5 @@
 local settings = require "settings"
+local grid = require "grid"
 
 local Player = {}
 Player.__index = Player
@@ -24,6 +25,7 @@ function Player:new(world)
     o.id = getPlayerId()
     o.x = x
     o.y = y
+    o.gridx, o.gridy = grid:getGridCoords(o.x, o.y)
     o.world = world
     world:add(o.id, x, y, w, h)
     return o
@@ -43,13 +45,14 @@ function Player:update(dt)
     if love.keyboard.isDown("left") then
         dx = dx - (v * dt)
     end
+    --update player.gridx, player.gridy
     local cols, len
     self.x, self.y, cols, len = self.world:move(self.id, self.x + dx, self.y + dy)
-    for k, v in pairs(cols) do
+    self.gridx, self.gridy = grid:getGridCoords(self:getCenter())
+    for _, v in pairs(cols) do
         local other = v.other
         if other.name == "door" then
             local gridx, gridy = other.gridx, other.gridy
-            local success = false
             if other.orientation == "top" then
                 self.world:remove(other)
                 return gridx, gridy - 1
@@ -86,6 +89,10 @@ end
 
 function Player:destroy()
     self.world:remove(self.id)
+end
+
+function Player:getCenter()
+    return self.x + (w/2), self.y + (h/2)
 end
 
 return Player

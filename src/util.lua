@@ -36,8 +36,12 @@ Util.scrambleTable = function(t)
 end
 
 Util.printTable = function(t)
-    for k, v in pairs(t) do
-        print(k, v)
+    for _, v in pairs(t) do
+        if type(v) == "table" then
+            Util.printTable(v)
+        else
+            print(v)
+        end
     end
 end
 

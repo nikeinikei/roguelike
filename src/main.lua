@@ -2,6 +2,7 @@
 --all callback functions get implemented and call the apropriate method of the Application
 
 local Application = require "application"
+print("random seed = ", love.math.getRandomSeed())
 
 function love.load()
     Application:load()

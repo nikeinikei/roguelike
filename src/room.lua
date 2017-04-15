@@ -1,8 +1,6 @@
 local grid = require "grid"
 local Wall = require "wall"
 local Door = require "door"
-local Queue = require "queue"
-local util = require "util"
 
 local Room = {}
 Room.__index = Room
@@ -87,30 +85,62 @@ function Room:new(world, x, y)
 
     --wallgeneration
     walls = {}
-    for k, v in pairs(rooms) do
+    for _, v in pairs(rooms) do
         addWalls(world, v)
     end
     o.walls = walls
-
-    --doorgeneration
-    local randomWallIndex = love.math.random(#walls)
-    local randomWall = walls[randomWallIndex]
-    local wallx = randomWall.gridx
-    local wally = randomWall.gridy
-    local wallorientation = randomWall.orientation
-    randomWall:destroy()
-    table.remove(walls, randomWallIndex)
-    local door = Door:new(world, wallx, wally, wallorientation)
-    o.door = door
+    o.world = world
+    o.doors = {}
 
     return o
 end
 
+function Room:addDoor()
+    local validWalls = {}
+    for _, v in pairs(self.walls) do
+        if v:isOpen() then
+            table.insert(validWalls, v)
+        end
+    end
+    if #validWalls > 0 then
+        local randomWall = validWalls[love.math.random(#validWalls)]
+        local wallx = randomWall.gridx
+        local wally = randomWall.gridy
+        local wallorientation = randomWall.orientation
+        randomWall:destroy()
+        local index
+        for k, v in pairs(self.walls) do
+            if v == randomWall then
+                index = k
+            end
+        end
+        if index == nil then
+            error("this error shuoldnt happen.")
+        end
+        table.remove(self.walls, index)
+        table.insert(self.doors, Door:new(self.world, wallx, wally, wallorientation))
+        return true
+    end
+    return false
+end
+
 function Room:draw()
-    for k, v in pairs(self.walls) do
+    for _, v in pairs(self.walls) do
         v:draw()
     end
-    self.door:draw()
+    for _, v in pairs(self.doors) do
+        v:draw()
+    end
+end
+
+function Room:contains(gridx, gridy)
+    --print("Room:contains(). self.rooms:", self.rooms)
+    for k, v in pairs(self.rooms) do
+        if v.x == gridx and v.y == gridy then
+            return true
+        end
+    end
+    return false
 end
 
 return Room

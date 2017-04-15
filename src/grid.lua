@@ -1,7 +1,7 @@
 local settings = require "settings"
 local unit = settings.gridwidth
-local halfunit = unit / 2
 
+--todo make Grid inherit from Array2d
 --the interface table
 local Grid = {}
 
@@ -58,7 +58,7 @@ function Grid:draw()
             love.graphics.rectangle("fill", x, y, unit, unit)
             love.graphics.setColor(255, 255, 255, 255)
             local coords = "(" .. kx .. ", " .. ky .. ")"
-            --love.graphics.print(coords, x + halfunit - 40, y + halfunit - 40)
+        --love.graphics.print(coords, x + halfunit - 40, y + halfunit - 40)
         end
     end
 end
@@ -69,6 +69,33 @@ function Grid:print()
             print(kx, ky, vy)
         end
     end
+end
+
+function Grid:getGridCoords(x, y)
+    local gridx, gridy = 0, 0
+    if x >= 0 then
+        while x >= unit do
+            gridx = gridx + 1
+            x = x - unit
+        end
+    else
+        while x < 0 do
+            gridx = gridx - 1
+            x = x + unit
+        end
+    end
+    if y >= 0 then
+        while y >= unit do
+            gridy = gridy + 1
+            y = y - unit
+        end
+    else
+        while y < 0 do
+            gridy = gridy - 1
+            y = y + unit
+        end
+    end
+    return gridx, gridy
 end
 
 return Grid

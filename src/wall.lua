@@ -65,6 +65,24 @@ function Wall:new(world, gridx, gridy, orientation)
     return o
 end
 
+local grid = require "grid"
+function Wall:isOpen()
+    local orientation = self.orientation
+    if orientation == "top" then
+        return grid:get(self.gridx, self.gridy - 1) == false
+    end
+    if orientation == "right" then
+        return grid:get(self.gridx + 1, self.gridy) == false
+    end
+    if orientation == "lower" then
+        return grid:get(self.gridx, self.gridy + 1) == false
+    end
+    if orientation == "left" then
+        return grid:get(self.gridx - 1, self.gridy) == false
+    end
+    error("this error shouldnt happen.")
+end
+
 local c = wallColor
 function Wall:draw()
     love.graphics.setColor(c.r, c.g, c.b, c.a)

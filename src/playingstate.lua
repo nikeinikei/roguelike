@@ -4,12 +4,10 @@
 local Gamestate = require "gamestate"
 local grid = require "grid"
 local Player = require "player"
-local Room = require "room"
 local camera = require "camera"
 local bump = require "bump"
-local settings = require "settings"
+local rooms = require "rooms"
 
-local rooms
 local player
 local world
 
@@ -24,10 +22,9 @@ function PlayingState:new(application)
     grid:reset()
 
     world = bump.newWorld()
+    rooms:reset(world)
     player = Player:new(world)
     camera:setPlayer(player)
-    rooms = {}
-    table.insert(rooms, Room:new(world, settings.startingTile.gridx, settings.startingTile.gridy))
 
     return o
 end
@@ -35,7 +32,7 @@ end
 function PlayingState:update(dt)
     local gridx, gridy = player:update(dt)
     if gridx ~= nil and gridy ~= nil then
-        table.insert(rooms, Room:new(world, gridx, gridy))
+        rooms:addRoom(player.gridx, player.gridy, gridx, gridy)
     end
     camera:update()
 end
@@ -45,9 +42,7 @@ function PlayingState:draw()
 
     grid:draw()
     player:draw()
-    for k, v in pairs(rooms) do
-        v:draw()
-    end
+    rooms:draw()
 
     --reset the transformations done by the camera
     love.graphics.origin()

@@ -3,7 +3,7 @@
 --pop(): pops the topmost element off the stack and returns it#
 --top(): returns the element on the top
 
-Stack = {
+local Stack = {
     stack = {}
 }
 
@@ -26,3 +26,5 @@ end
 function Stack:top()
     return self.stack[table.maxn(self.stack)]
 end
+
+return Stack

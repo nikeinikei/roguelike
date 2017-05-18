@@ -1,9 +1,10 @@
 local Player = require "player"
 local playerw, playerh = Player:getDimensions()
+local settings = require "settings"
 
 local camera = {}
 
-local padding = 220
+local padding = settings.camera.padding
 local transx = 0
 local transy = 0
 

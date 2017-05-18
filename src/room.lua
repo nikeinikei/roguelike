@@ -2,6 +2,9 @@ local grid = require "grid"
 local Wall = require "wall"
 local Door = require "door"
 
+local minNumberOfRooms = 3
+local maxNumberOfRooms = 15
+
 local Room = {}
 Room.__index = Room
 
@@ -16,10 +19,19 @@ end
 
 local probability
 local rooms
-
+--todo movable objects in rooms
 --todo create another algorithm which takes a random room everytime of the iteration instead of chaining the rooms together
+--todo make background color of room different for every room
+--todo make rooms more connected
 local function addRoom(x, y)
-    local randomNumber = love.math.random()
+    local randomNumber
+    if #rooms < minNumberOfRooms then
+      randomNumber = 0
+    elseif #rooms == maxNumberOfRooms then
+      randomNumber = 1
+    else
+      randomNumber = love.math.random()
+    end
     if randomNumber <= probability then
         probability = probability * probabilityMultiplier
         grid:set(x, y)
@@ -95,7 +107,8 @@ function Room:new(world, x, y)
     return o
 end
 
-function Room:addDoor()
+--returns wether or not it was successful
+function Room:addDoors()
     local validWalls = {}
     for _, v in pairs(self.walls) do
         if v:isOpen() then
@@ -115,7 +128,7 @@ function Room:addDoor()
             end
         end
         if index == nil then
-            error("this error shuoldnt happen.")
+            error("this error shuoldn't happen.")
         end
         table.remove(self.walls, index)
         table.insert(self.doors, Door:new(self.world, wallx, wally, wallorientation))

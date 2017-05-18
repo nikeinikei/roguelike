@@ -16,10 +16,8 @@ function Rooms:reset(newWorld)
     graph = Graph:new()
     world = newWorld
     local room = Room:new(world, startx, starty)
-    room:addDoor()
-    rooms = {
-        room
-    }
+    room:addDoors()
+    rooms = {room}
     graph:addVertice(room)
 end
 
@@ -61,7 +59,7 @@ function Rooms:addRoom(prevx, prevy, x, y)
     queue:add(newRoom)
     while queue:isEmpty() == false do
         local room = queue:poll()
-        local result = room:addDoor()
+        local result = room:addDoors()
         if result == false then
             table.insert(visited, room)
             local edges = graph:getEdges(room)

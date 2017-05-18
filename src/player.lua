@@ -4,33 +4,41 @@ local grid = require "grid"
 local Player = {}
 Player.__index = Player
 
-local w = 30
-local h = 30
+local w = settings.player.w
+local h = settings.player.h
 local x = settings.startingTile.gridx * settings.gridwidth + (settings.gridwidth / 2)
 local y = settings.startingTile.gridy * settings.gridwidth + (settings.gridwidth / 2)
 local v = 400
 
-local dx, dy
-
-local counter = 1
-local function getPlayerId()
-    local playerId = "player-" .. counter
-    counter = counter + 1
-    return playerId
-end
-
 function Player:new(world)
     local o = {}
     setmetatable(o, self)
-    o.id = getPlayerId()
     o.x = x
     o.y = y
     o.gridx, o.gridy = grid:getGridCoords(o.x, o.y)
     o.world = world
-    world:add(o.id, x, y, w, h)
+    o.direction = 0
+    o.name = "player"
+    world:add(o, x, y, w, h)
     return o
 end
 
+local function filter(_, other)
+    if other.name == "shot" then
+        return 'cross'
+    end
+    if other.name == "wall" then
+        return "slide"
+    end
+    if other.name == "partialDoorObject" then
+        return "slide"
+    end
+    if other.name == "door" then
+        return "cross"
+    end
+end
+
+local dx, dy
 function Player:update(dt)
     dx, dy = 0, 0
     if love.keyboard.isDown("up") then
@@ -46,8 +54,9 @@ function Player:update(dt)
         dx = dx - (v * dt)
     end
     --update player.gridx, player.gridy
+    self:updateDirection(dx, dy)
     local cols, len
-    self.x, self.y, cols, len = self.world:move(self.id, self.x + dx, self.y + dy)
+    self.x, self.y, cols, len = self.world:move(self, self.x + dx, self.y + dy, filter)
     self.gridx, self.gridy = grid:getGridCoords(self:getCenter())
     for _, v in pairs(cols) do
         local other = v.other
@@ -72,6 +81,35 @@ function Player:update(dt)
             error("no fitting direction")
         end
     end
+    return nil --redundant, like me
+end
+
+--the direction starts at 0 at east, an increase of one correlates to a 45° rotation 
+--this was done to make calculations in shots.lua easier
+function Player:updateDirection(dx, dy)
+    if dx > 0 then
+        if dy > 0 then
+            self.direction = 1
+        elseif dy == 0 then
+            self.direction = 0
+        else
+            self.direction = 7
+        end
+    elseif dx == 0 then
+        if dy > 0 then
+            self.direction = 2
+        else
+            self.direction = 6
+        end
+    else
+        if dy > 0 then
+            self.direction = 3
+        elseif dy == 0 then
+            self.direction = 4
+        else
+            self.direction = 5
+        end
+    end
 end
 
 function Player:draw()
@@ -88,11 +126,11 @@ function Player:getDimensions()
 end
 
 function Player:destroy()
-    self.world:remove(self.id)
+    self.world:remove(self)
 end
 
 function Player:getCenter()
-    return self.x + (w/2), self.y + (h/2)
+    return self.x + (w / 2), self.y + (h / 2)
 end
 
 return Player

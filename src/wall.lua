@@ -16,13 +16,6 @@ local wallColor = {
 local Wall = {}
 Wall.__index = Wall
 
-local counter = 1
-local function getWallId()
-    local wallid = "wall-" .. counter
-    counter = counter + 1
-    return wallid
-end
-
 function Wall:new(world, gridx, gridy, orientation)
     local o = {}
     setmetatable(o, self)
@@ -50,8 +43,6 @@ function Wall:new(world, gridx, gridy, orientation)
         local errormessage = "invalid orientation: \"" .. orientation .. "\""
         error(errormessage)
     end
-    o.wallId = getWallId()
-    world:add(o.wallId, x, y, w, h)
     o.gridx = gridx
     o.gridy = gridy
     o.x = x
@@ -62,6 +53,8 @@ function Wall:new(world, gridx, gridy, orientation)
     o.gridy = gridy
     o.orientation = orientation
     o.world = world
+    o.name = "wall"
+    world:add(o, x, y, w, h)
     return o
 end
 
@@ -94,7 +87,7 @@ function Wall:getColor()
 end
 
 function Wall:destroy()
-    self.world:remove(self.wallId)
+    self.world:remove(self)
 end
 
 function Wall:getWidth()

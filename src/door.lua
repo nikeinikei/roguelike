@@ -61,15 +61,20 @@ function Door:new(world, gridx, gridy, orientation)
         local errormessage = "invalid orientation: \"" .. orientation .. "\""
         error(errormessage)
     end
-    world:add(leftDoorId, left.x, left.y, left.w, left.h)
-    world:add(rightDoorId, right.x, right.y, right.w, right.h)
+    function createPartialDoorObject(id)
+        return {doorId = id, owner = self, name = "partialDoorObject"}
+    end
+    local leftDoorObject = createPartialDoorObject(leftDoorId)
+    local rightDoorObject = createPartialDoorObject(rightDoorId)
+    world:add(leftDoorObject, left.x, left.y, left.w, left.h)
+    world:add(rightDoorObject, right.x, right.y, right.w, right.h)
     world:add(o, door.x, door.y, door.w, door.h)
     o.door = door
     o.world = world
     o.left = left
     o.right = right
-    o.leftDoorId = leftDoorId
-    o.rightDoorId = rightDoorId
+    o.leftDoorObject = leftDoorObject
+    o.rightDoorObject = rightDoorObject
     o.gridx = gridx
     o.gridy = gridy
     o.orientation = orientation
@@ -86,8 +91,9 @@ function Door:draw()
 end
 
 function Door:destroy()
-    self.world:remove(self.leftDoorId)
-    self.world:remove(self.rightDoorId)
+    self.world:remove(self.leftDoorObject)
+    self.world:remove(self.rightDoorObject)
+    self.world:remove(self)
 end
 
 return Door

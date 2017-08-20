@@ -1,12 +1,12 @@
 --A class for a clock object to keep track of elapsed Time
 local Clock = {}
-Clock.__index = Clock
+local Clock_mt = {__index = Clock}
 
 function Clock:new()
-    local o = {}
-    setmetatable(o, self)
+    local self = {}
+    setmetatable(self, Clock_mt)
     self.startTime = love.timer.getTime()
-    return o
+    return self
 end
 
 function Clock:getElapsedTime()

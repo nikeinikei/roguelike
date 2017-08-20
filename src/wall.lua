@@ -14,11 +14,11 @@ local wallColor = {
 }
 
 local Wall = {}
-Wall.__index = Wall
+local Wall_mt = {__index = Wall}
 
 function Wall:new(world, gridx, gridy, orientation)
-    local o = {}
-    setmetatable(o, self)
+    local self = {}
+    setmetatable(self, Wall_mt)
     local lowerx = gridx * unit
     local lowery = gridy * unit
     local success = false
@@ -43,19 +43,19 @@ function Wall:new(world, gridx, gridy, orientation)
         local errormessage = "invalid orientation: \"" .. orientation .. "\""
         error(errormessage)
     end
-    o.gridx = gridx
-    o.gridy = gridy
-    o.x = x
-    o.y = y
-    o.w = w
-    o.h = h
-    o.gridx = gridx
-    o.gridy = gridy
-    o.orientation = orientation
-    o.world = world
-    o.name = "wall"
-    world:add(o, x, y, w, h)
-    return o
+    self.gridx = gridx
+    self.gridy = gridy
+    self.x = x
+    self.y = y
+    self.w = w
+    self.h = h
+    self.gridx = gridx
+    self.gridy = gridy
+    self.orientation = orientation
+    self.world = world
+    self.name = "wall"
+    world:add(self, x, y, w, h)
+    return self
 end
 
 local grid = require "grid"

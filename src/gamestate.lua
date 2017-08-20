@@ -1,15 +1,13 @@
 --base class for all gamestates
 --it implements all callback functions
-local Gamestate = {
-    app
-}
-Gamestate.__index = Gamestate
+local Gamestate = {}
+local Gamestate_mt = {__index = Gamestate}
 
 function Gamestate:new(application)
-    local o = {}
-    setmetatable(o, self)
-    o.app = application
-    return o
+    local self = {}
+    setmetatable(self, Gamestate_mt)
+    self.app = application
+    return self
 end
 
 function Gamestate:setApp(application)

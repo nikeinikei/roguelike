@@ -3,16 +3,14 @@
 --pop(): pops the topmost element off the stack and returns it#
 --top(): returns the element on the top
 
-local Stack = {
-    stack = {}
-}
+local Stack = {}
+local Stack_mt = {__index = Stack}
 
-function Stack:new(o)
-    o = o or self
-    setmetatable(o, self)
-    self.__index = self
-    o.stack = {}
-    return o
+function Stack:new()
+    local self = {}
+    setmetatable(self, Stack_mt)
+    self.stack = {}
+    return self
 end
 
 function Stack:push(element)

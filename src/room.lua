@@ -6,7 +6,7 @@ local minNumberOfRooms = 3
 local maxNumberOfRooms = 15
 
 local Room = {}
-Room.__index = Room
+local Room_mt = {__index = Room}
 
 local probabilityMultiplier = 0.985 --this will generate approximately 10 unit squares everytime
 
@@ -87,24 +87,24 @@ local function addWalls(world, room)
 end
 
 function Room:new(world, x, y)
-    local o = {}
-    setmetatable(o, self)
+    local self = {}
+    setmetatable(self, Room_mt)
 
     rooms = {}
     probability = 1
     addRoom(x, y)
-    o.rooms = rooms
+    self.rooms = rooms
 
     --wallgeneration
     walls = {}
     for _, v in pairs(rooms) do
         addWalls(world, v)
     end
-    o.walls = walls
-    o.world = world
-    o.doors = {}
+    self.walls = walls
+    self.world = world
+    self.doors = {}
 
-    return o
+    return self
 end
 
 --returns wether or not it was successful

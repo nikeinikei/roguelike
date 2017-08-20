@@ -1,5 +1,6 @@
 local Shot = require "shot"
 
+--singleton
 local Shots = {}
 
 local shots

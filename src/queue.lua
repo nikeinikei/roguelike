@@ -1,11 +1,11 @@
 local Queue = {}
-Queue.__index = Queue
+local Queue_mt = {__index = Queue}
 
 function Queue:new(t)
-    local o = {}
-    setmetatable(o, self)
-    o.queue = t or {}
-    return o
+    local self = {}
+    setmetatable(self, Queue_mt)
+    self.queue = t or {}
+    return self
 end
 
 function Queue:peek()

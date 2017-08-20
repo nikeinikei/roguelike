@@ -2,6 +2,7 @@ local settings = require "settings"
 local unit = settings.gridwidth
 
 --todo make Grid inherit from Array2d
+--Singleton
 --the interface table
 local Grid = {}
 

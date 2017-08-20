@@ -2,7 +2,7 @@ local settings = require "settings"
 local grid = require "grid"
 
 local Player = {}
-Player.__index = Player
+local Player_mt = {__index = Player}
 
 local w = settings.player.w
 local h = settings.player.h
@@ -11,16 +11,16 @@ local y = settings.startingTile.gridy * settings.gridwidth + (settings.gridwidth
 local v = 400
 
 function Player:new(world)
-    local o = {}
-    setmetatable(o, self)
-    o.x = x
-    o.y = y
-    o.gridx, o.gridy = grid:getGridCoords(o.x, o.y)
-    o.world = world
-    o.direction = 0
-    o.name = "player"
-    world:add(o, x, y, w, h)
-    return o
+    local self = {}
+    setmetatable(self, Player_mt)
+    self.x = x
+    self.y = y
+    self.gridx, self.gridy = grid:getGridCoords(self.x, self.y)
+    self.world = world
+    self.direction = 0
+    self.name = "player"
+    world:add(self, x, y, w, h)
+    return self
 end
 
 local function filter(_, other)

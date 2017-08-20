@@ -13,7 +13,7 @@ local offset = (unit / 2) - (width / 2)
 local offsetHalf = offset / 2
 
 local Door = {}
-Door.__index = Door
+local Door_mt = {__index = Door}
 
 local counter = 1
 local function getDoorIds()
@@ -24,8 +24,8 @@ local function getDoorIds()
 end
 
 function Door:new(world, gridx, gridy, orientation)
-    local o = {}
-    setmetatable(o, self)
+    local self = {}
+    setmetatable(self, Door_mt)
     local lowerx = gridx * unit
     local lowery = gridy * unit
     local success = false
@@ -61,25 +61,25 @@ function Door:new(world, gridx, gridy, orientation)
         local errormessage = "invalid orientation: \"" .. orientation .. "\""
         error(errormessage)
     end
-    function createPartialDoorObject(id)
+    local function createPartialDoorObject(id)
         return {doorId = id, owner = self, name = "partialDoorObject"}
     end
     local leftDoorObject = createPartialDoorObject(leftDoorId)
     local rightDoorObject = createPartialDoorObject(rightDoorId)
     world:add(leftDoorObject, left.x, left.y, left.w, left.h)
     world:add(rightDoorObject, right.x, right.y, right.w, right.h)
-    world:add(o, door.x, door.y, door.w, door.h)
-    o.door = door
-    o.world = world
-    o.left = left
-    o.right = right
-    o.leftDoorObject = leftDoorObject
-    o.rightDoorObject = rightDoorObject
-    o.gridx = gridx
-    o.gridy = gridy
-    o.orientation = orientation
-    o.name = "door"
-    return o
+    world:add(self, door.x, door.y, door.w, door.h)
+    self.door = door
+    self.world = world
+    self.left = left
+    self.right = right
+    self.leftDoorObject = leftDoorObject
+    self.rightDoorObject = rightDoorObject
+    self.gridx = gridx
+    self.gridy = gridy
+    self.orientation = orientation
+    self.name = "door"
+    return self
 end
 
 local c = wallColor

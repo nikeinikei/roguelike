@@ -13,12 +13,12 @@ local player
 local world
 
 local PlayingState = Gamestate:new()
-PlayingState.__index = PlayingState
+local PlayingState_mt = {__index = PlayingState}
 
 function PlayingState:new(application)
-    local o = {}
-    setmetatable(o, self)
-    o:setApp(application)
+    local self = {}
+    setmetatable(self, PlayingState_mt)
+    self:setApp(application)
     
     grid:reset()
     camera:reset()
@@ -29,7 +29,7 @@ function PlayingState:new(application)
     player = Player:new(world)
     camera:setPlayer(player)
     
-    return o
+    return self
 end
 
 function PlayingState:update(dt)

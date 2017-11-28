@@ -12,12 +12,10 @@ local shots = require "shots"
 local player
 local world
 
-local PlayingState = Gamestate:new()
-local PlayingState_mt = {__index = PlayingState}
+--inherit from Gamestate
+local PlayingState = Gamestate:extend()
 
 function PlayingState:new(application)
-    local self = {}
-    setmetatable(self, PlayingState_mt)
     self:setApp(application)
     
     grid:reset()
@@ -26,10 +24,8 @@ function PlayingState:new(application)
     
     world = bump.newWorld()
     rooms:reset(world)
-    player = Player:new(world)
+    player = Player(world)
     camera:setPlayer(player)
-    
-    return self
 end
 
 function PlayingState:update(dt)

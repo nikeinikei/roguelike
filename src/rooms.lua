@@ -8,14 +8,14 @@ local starty = settings.startingTile.gridy
 --singleton / global variable which holds all doors
 local Rooms = {}
 
-local graph = Graph:new()
+local graph = Graph()
 local rooms = {}
 local world
 
 function Rooms:reset(newWorld)
-    graph = Graph:new()
+    graph = Graph()
     world = newWorld
-    local room = Room:new(world, startx, starty)
+    local room = Room(world, startx, starty)
     room:addDoors()
     rooms = {room}
     graph:addVertice(room)
@@ -46,7 +46,7 @@ local Queue = require "queue"
 local util = require "util"
 function Rooms:addRoom(prevx, prevy, x, y)
     --print("called add room with arguments:", prevx, prevy, x, y)
-    local newRoom = Room:new(world, x, y)
+    local newRoom = Room(world, x, y)
     graph:addVertice(newRoom)
     local prevDoor = getDoor(prevx, prevy)
     if prevDoor == nil then
@@ -54,7 +54,7 @@ function Rooms:addRoom(prevx, prevy, x, y)
     end
     graph:addEdge(newRoom, prevDoor)
     --"breitensuche"
-    local queue = Queue:new()
+    local queue = Queue()
     local visited = {}
     queue:add(newRoom)
     while queue:isEmpty() == false do
@@ -85,8 +85,8 @@ function Rooms:getGraph()
     return graph
 end
 
-function getRoom(gridx, gridy)
-
-end
+--function getRoom(gridx, gridy)
+--
+--end
 
 return Rooms

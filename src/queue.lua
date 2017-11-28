@@ -1,11 +1,7 @@
-local Queue = {}
-local Queue_mt = {__index = Queue}
+local Queue = Object:extend()
 
 function Queue:new(t)
-    local self = {}
-    setmetatable(self, Queue_mt)
     self.queue = t or {}
-    return self
 end
 
 function Queue:peek()

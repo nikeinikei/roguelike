@@ -5,8 +5,7 @@ local Door = require "door"
 local minNumberOfRooms = 3
 local maxNumberOfRooms = 15
 
-local Room = {}
-local Room_mt = {__index = Room}
+local Room = Object:extend()
 
 local probabilityMultiplier = 0.985 --this will generate approximately 10 unit squares everytime
 
@@ -73,23 +72,20 @@ local function addWalls(world, room)
     local y = room.y
 
     if grid:get(x, y - 1) == false then
-        table.insert(walls, Wall:new(world, x, y, "top"))
+        table.insert(walls, Wall(world, x, y, "top"))
     end
     if grid:get(x + 1, y) == false then
-        table.insert(walls, Wall:new(world, x, y, "right"))
+        table.insert(walls, Wall(world, x, y, "right"))
     end
     if grid:get(x, y + 1) == false then
-        table.insert(walls, Wall:new(world, x, y, "lower"))
+        table.insert(walls, Wall(world, x, y, "lower"))
     end
     if grid:get(x - 1, y) == false then
-        table.insert(walls, Wall:new(world, x, y, "left"))
+        table.insert(walls, Wall(world, x, y, "left"))
     end
 end
 
 function Room:new(world, x, y)
-    local self = {}
-    setmetatable(self, Room_mt)
-
     rooms = {}
     probability = 1
     addRoom(x, y)
@@ -103,8 +99,6 @@ function Room:new(world, x, y)
     self.walls = walls
     self.world = world
     self.doors = {}
-
-    return self
 end
 
 --returns wether or not it was successful
@@ -131,7 +125,7 @@ function Room:addDoors()
             error("this error shuoldn't happen.")
         end
         table.remove(self.walls, index)
-        table.insert(self.doors, Door:new(self.world, wallx, wally, wallorientation))
+        table.insert(self.doors, Door(self.world, wallx, wally, wallorientation))
         return true
     end
     return false

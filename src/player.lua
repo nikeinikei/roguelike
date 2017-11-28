@@ -1,8 +1,7 @@
 local settings = require "settings"
 local grid = require "grid"
 
-local Player = {}
-local Player_mt = {__index = Player}
+local Player = Object:extend()
 
 local w = settings.player.w
 local h = settings.player.h
@@ -11,8 +10,9 @@ local y = settings.startingTile.gridy * settings.gridwidth + (settings.gridwidth
 local v = 400
 
 function Player:new(world)
-    local self = {}
-    setmetatable(self, Player_mt)
+    if world == nil then
+        error "world shouldn't be nil"
+    end
     self.x = x
     self.y = y
     self.gridx, self.gridy = grid:getGridCoords(self.x, self.y)
@@ -20,7 +20,6 @@ function Player:new(world)
     self.direction = 0
     self.name = "player"
     world:add(self, x, y, w, h)
-    return self
 end
 
 local function filter(_, other)

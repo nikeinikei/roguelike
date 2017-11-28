@@ -1,5 +1,4 @@
-local Shot = {}
-local Shot_mt = {__index = Shot}
+local Shot = Object:extend()
 
 local function toRadians(a)
     return a * math.pi / 180
@@ -11,8 +10,6 @@ local r = 10
 local sidelength = r * 2 * 0.7
 
 function Shot:new(world, x, y, a, v)
-    local self = {}
-    setmetatable(self, Shot_mt)
     world:add(self, x - (sidelength / 2), y - (sidelength / 2), sidelength, sidelength)
     self.world = world
     self.x = x
@@ -20,7 +17,6 @@ function Shot:new(world, x, y, a, v)
     self.dx = math.cos(toRadians(a)) * v
     self.dy = math.sin(toRadians(a)) * v
     self.name = "shot"
-    return self
 end
 
 local function filter(_, other)

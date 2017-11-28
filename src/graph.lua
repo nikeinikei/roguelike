@@ -1,15 +1,11 @@
 local Array2d = require "array2d"
 
-local Graph = {}
-local Graph_mt = {__index = Graph}
+local Graph = Object:extend()
 
 function Graph:new()
-    local self = {}
-    setmetatable(self, Graph_mt)
-    self.matrix = Array2d:new()
+    self.matrix = Array2d()
     self.vertices = {}
     self.size = 0
-    return self
 end
 
 function Graph:addVertice(id)

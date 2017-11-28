@@ -17,7 +17,7 @@ function Shots:add(world, x, y, direction)
         a = a + 45
         direction = direction - 1
     end
-    table.insert(shots, Shot:new(world, x, y, a, v))
+    table.insert(shots, Shot(world, x, y, a, v))
 end
 
 function Shots:update(dt)

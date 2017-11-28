@@ -13,12 +13,9 @@ local wallColor = {
     a = 255
 }
 
-local Wall = {}
-local Wall_mt = {__index = Wall}
+local Wall = Object:extend()
 
 function Wall:new(world, gridx, gridy, orientation)
-    local self = {}
-    setmetatable(self, Wall_mt)
     local lowerx = gridx * unit
     local lowery = gridy * unit
     local success = false
@@ -55,7 +52,6 @@ function Wall:new(world, gridx, gridy, orientation)
     self.world = world
     self.name = "wall"
     world:add(self, x, y, w, h)
-    return self
 end
 
 local grid = require "grid"

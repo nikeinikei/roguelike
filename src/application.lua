@@ -4,7 +4,7 @@ local PlayingState = require "playingstate"
 local Application = {}
 
 --hold all of the gamestates in a Stack data type
-Application.gamestates = Stack:new()
+Application.gamestates = Stack()
 
 --functions to change the gamestate
 function Application:pushState(state)
@@ -23,7 +23,7 @@ end
 
 --all callback functions
 function Application:load()
-    Application.gamestates:push(PlayingState:new(Application))
+    Application.gamestates:push(PlayingState(Application))
 end
 
 function Application:update(dt)

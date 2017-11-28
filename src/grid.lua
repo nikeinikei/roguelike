@@ -4,6 +4,8 @@ local unit = settings.gridwidth
 --todo make Grid inherit from Array2d
 --Singleton
 --the interface table
+
+--singleton class
 local Grid = {}
 
 --the value table

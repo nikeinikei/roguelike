@@ -12,8 +12,7 @@ local width = select(1, player:getDimensions()) + (padding * 2)
 local offset = (unit / 2) - (width / 2)
 local offsetHalf = offset / 2
 
-local Door = {}
-local Door_mt = {__index = Door}
+local Door = Object:extend()
 
 local counter = 1
 local function getDoorIds()
@@ -24,8 +23,6 @@ local function getDoorIds()
 end
 
 function Door:new(world, gridx, gridy, orientation)
-    local self = {}
-    setmetatable(self, Door_mt)
     local lowerx = gridx * unit
     local lowery = gridy * unit
     local success = false
@@ -79,7 +76,6 @@ function Door:new(world, gridx, gridy, orientation)
     self.gridy = gridy
     self.orientation = orientation
     self.name = "door"
-    return self
 end
 
 local c = wallColor

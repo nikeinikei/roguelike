@@ -1,11 +1,7 @@
-local Set = {}
-local Set_mt = {__index = Set}
+local Set = Object:extend()
 
 function Set:new()
-    local self = {}
-    setmetatable(self, Set_mt)
     self.items = {}
-    return self
 end
 
 --o: object

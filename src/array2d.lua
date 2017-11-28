@@ -1,5 +1,4 @@
-local Array2d = {}
-local Array2d_mt = {__index = Array2d}
+local Array2d = Object:extend()
 
 local function assertNumber(n)
     if type(n) ~= "number" then
@@ -9,10 +8,7 @@ local function assertNumber(n)
 end
 
 function Array2d:new()
-    local self = {}
-    setmetatable(self, Array2d_mt)
     self.array = {}
-    return self
 end
 
 function Array2d:set(x, y, val)

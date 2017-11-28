@@ -1,7 +1,8 @@
 --entry point of the program
 --all callback functions get implemented and call the apropriate method of the Application
 
-require("lovedebug")
+--require "lovedebug"
+require "globals"
 
 local Application = require "application"
 

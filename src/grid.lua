@@ -57,9 +57,9 @@ function Grid:draw()
         for ky, vy in pairs(vx) do
             local x = kx * unit
             local y = ky * unit
-            love.graphics.setColor(150, 150, 255, 127)
+            love.graphics.setColor(150 / 255, 150 / 255, 255 / 255, 127 / 255)
             love.graphics.rectangle("fill", x, y, unit, unit)
-            love.graphics.setColor(255, 255, 255, 255)
+            love.graphics.setColor(1, 1, 1, 1)
             local coords = "(" .. kx .. ", " .. ky .. ")"
         --love.graphics.print(coords, x + halfunit - 40, y + halfunit - 40)
         end

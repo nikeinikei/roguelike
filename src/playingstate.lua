@@ -48,7 +48,7 @@ function PlayingState:draw()
     
     --reset the transformations done by the camera
     love.graphics.origin()
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(1, 1, 1, 1)
     local fps = "fps: " .. love.timer.getFPS()
     love.graphics.print(fps)
 end

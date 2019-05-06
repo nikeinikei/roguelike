@@ -48,7 +48,7 @@ function Shot:update(dt)
 end
 
 function Shot:draw()
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.circle("fill", self.x, self.y, 10)
 end
 

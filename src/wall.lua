@@ -7,10 +7,10 @@ local wallWdith = 6
 local halfWidth = wallWdith / 2
 
 local wallColor = {
-    r = 255,
-    g = 255,
-    b = 255,
-    a = 255
+    r = 1,
+    g = 1,
+    b = 1,
+    a = 1
 }
 
 local Wall = Object:extend()

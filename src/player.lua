@@ -112,7 +112,7 @@ function Player:updateDirection(dx, dy)
 end
 
 function Player:draw()
-    love.graphics.setColor(220, 220, 220, 255)
+    love.graphics.setColor(220 / 255, 220 / 255, 220 / 255, 1)
     love.graphics.rectangle("fill", self.x, self.y, w, h)
 end
 
